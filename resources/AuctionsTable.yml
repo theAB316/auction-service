@@ -1,0 +1,23 @@
+AuctionsTable:                                  # logical ID
+  Type: AWS::DynamoDB::Table
+  Properties:                                   # each resource in AWS has diff properties that it can support
+    TableName: AuctionsTable-${self:provider.stage}
+    BillingMode: PAY_PER_REQUEST
+
+    # PrimaryKey can be 
+    #   1. just PartitionKey (ptk)
+    #   2. PartitionKey + SortKey (stk)
+    # ptk is used as an input into the DDB' s hash function.
+    # the output of the hash function gives the location of the physical partition
+    # 
+    # stk is also called RangeKey.
+    # If you specicy stk, DDB will store your record in partition but in sorted order
+    # based on your stk.
+    # combi of ptk+stk must be globally unique 
+
+    AttributeDefinitions:
+      - AttributeName: id
+        AttributeType: S                        # S means string
+    KeySchema:
+      - AttributeName: id
+        KeyType: HASH                           # partition key
